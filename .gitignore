@@ -2,3 +2,5 @@
 *.log
 .Python
 venv/
+config/
+app/config/
