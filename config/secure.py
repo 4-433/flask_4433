@@ -8,10 +8,10 @@
 """
 MySqlConfig = {
     'work_4433_setting': {
-        'host': '47.108.166.108',
+        'host': '',
         'port': 3306,
         'user': 'root',
-        'password': 'tudou@4433',
-        'db': 'work_4433'
+        'password': '',
+        'db': ''
     }
 }
