@@ -8,6 +8,7 @@
 """
 from app.libs.redprint import Redprint
 from app.service.File.FileService import FileService
+from app.validators.forms import FileGet
 
 api = Redprint('file')
 
@@ -20,3 +21,14 @@ def file_upload():
     """
     res = FileService()
     return res.upload()
+
+
+@api.route('/get', methods=['GET'])
+def file_get():
+    """
+    通过resource_id获取文件url
+    :return:
+    """
+    FileGet().validate_for_api()
+    rm = FileService()
+    return rm.down_file()
