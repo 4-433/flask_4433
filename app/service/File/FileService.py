@@ -24,7 +24,7 @@ class FileService(BaseService):
         files = self.get_files('files')
         if files is None:
             raise ClientTypeError(msg='无数据源！！！')
-        is_private = self.get_form('is_private')
+        is_private = self.get_form().get('is_private', 0)
         bucket = UploadManage()
         key = bucket.private_upload(files, is_private)
         suffix = files.filename.split('.')[-1]  # 获取文件后缀名

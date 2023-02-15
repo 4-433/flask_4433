@@ -28,7 +28,7 @@ class UploadManage(OssBase):
         bucket = self.get_bucket()
 
         headers = {}
-        headers.update({"x-oss-object-acl": oss2.OBJECT_ACL_PRIVATE if is_private else oss2.OBJECT_ACL_DEFAULT})
+        headers.update({"x-oss-object-acl": oss2.OBJECT_ACL_PRIVATE if is_private else oss2.OBJECT_ACL_PUBLIC_READ})
         res = bucket.put_object(key, content, headers)
         if res.status == 200:
             if is_private == 0:
