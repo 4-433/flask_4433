@@ -40,10 +40,11 @@ class OssBase:
         if not file_name:
             return None
         ext = file_name.split('.')[1].lower()  # 后缀名
+        name = file_name.split('.')[0]
         if not ext:
             return None
         int_date = get_int_now()
         uuidstr = str(uuid.uuid1()).replace('-', '')
 
-        name = "%s%s/%s" % (int_date, uuidstr, file_name)
+        name = "%s%s/%s.%s" % (int_date, uuidstr, name, ext)
         return name

@@ -15,6 +15,9 @@ class OssFile(db.Model):
     '''      '''
     id = Column(BigInteger(), primary_key=True)
 
+    '''   私有文件代码   '''
+    resource_id = Column(String(64))
+
     '''   私有文件（key)   '''
     key = Column(String(512), nullable=False)
 

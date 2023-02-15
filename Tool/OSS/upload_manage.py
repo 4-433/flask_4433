@@ -7,6 +7,7 @@
 @Motto: 
 """
 import oss2
+import ulid
 from flask import current_app
 
 from Tool.OSS.oss_base import OssBase
@@ -24,6 +25,7 @@ class UploadManage(OssBase):
         """
         file_name = content.filename  # 文件原始名称
         key = self.gen_key(file_name)
+        resource_id = ulid.ulid()
 
         bucket = self.get_bucket()
 
@@ -32,7 +34,13 @@ class UploadManage(OssBase):
         res = bucket.put_object(key, content, headers)
         if res.status == 200:
             if is_private == 0:
-                return r'{}/{}?type=new'.format(current_app.config['FILE_URL'], key)
+                return resource_id, r'{}/{}?type=new'.format(current_app.config['FILE_URL'], key)
             else:
-                return key
+                return resource_id, key
         raise FileError(msg="文件上传错误！")
+
+    def get_oss_img(self, key):
+        bucket = self.get_bucket()
+        result = bucket.sign_url(method='GET', key=key, expires=current_app.config['FILE_EXPIRATION'])
+        return result
+

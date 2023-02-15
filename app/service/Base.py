@@ -22,7 +22,7 @@ class BaseService:
     def get_files(self, key=None):
         if self._files is None:
             if key:
-                self._files = request.files.get(key)
+                self._files = request.files.get(key, None)
             else:
                 self._files = request.files
         return self._files
