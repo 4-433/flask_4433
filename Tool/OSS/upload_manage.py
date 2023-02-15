@@ -6,8 +6,9 @@
 @IDE ：PyCharm
 @Motto: 
 """
+import uuid
+
 import oss2
-import ulid
 from flask import current_app
 
 from Tool.OSS.oss_base import OssBase
@@ -25,7 +26,7 @@ class UploadManage(OssBase):
         """
         file_name = content.filename  # 文件原始名称
         key = self.gen_key(file_name)
-        resource_id = ulid.ulid()
+        resource_id = str(uuid.uuid1()).replace('-', '')
 
         bucket = self.get_bucket()
 
