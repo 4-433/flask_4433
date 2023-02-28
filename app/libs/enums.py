@@ -17,3 +17,14 @@ class FileTypeEnum(Enum):
     CSV = 13
     MP3 = 14
     MP4 = 15
+
+
+class SmsTemplateTypeEnum(Enum):
+    测试 = {
+        "sign_name": "阿里云短信测试",
+        "sms_template_code": "SMS_154950909",
+    }
+    注册 = {
+        "sign_name": "chaichai",
+        "sms_template_code": "SMS_270945528"
+    }
