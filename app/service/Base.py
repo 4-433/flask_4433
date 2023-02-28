@@ -10,6 +10,7 @@ class BaseService:
         self._data = None
         self._files = None
         self._form = None
+        self._args = None
 
     def get_data(self, key=None):
         if self._data is None:
@@ -34,6 +35,14 @@ class BaseService:
             else:
                 self._form = request.form
         return self._form
+
+    def get_args(self, key=None):
+        if self._args is None:
+            if key:
+                self._args = request.args.get(key)
+            else:
+                self._args = request.args
+        return self._args
 
     @staticmethod
     def query_to_dict(data):

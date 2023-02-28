@@ -52,7 +52,7 @@ class FileService(BaseService):
         获取文件
         :return:
         """
-        resource_id = self.get_data(key='resource_id')
+        resource_id = self.get_args(key='resource_id')
 
         # 获取数据
         with db.auto_commit():

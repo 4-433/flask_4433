@@ -76,3 +76,8 @@ class FileError(APIException):
     error_code = 1008
     msg = '文件错误'
 
+
+class SmsSendError(APIException):
+    code = 404
+    error_code = 1009
+    msg = '短信发送失败'
