@@ -70,17 +70,19 @@ def write_to_file(row, tb, tbdesc):
     f.write(
         'from sqlalchemy import Column, Integer, String, DateTime, Numeric, Boolean, SMALLINT, BigInteger, Float, TEXT, Date')
     f.write('\n')
+    f.write('from sqlalchemy.dialects.mysql import LONGTEXT')
+    f.write('\n')
     f.write('\n')
     f.write('\n')
     f.write('class ')
     f.write(tb.title().replace('_', ""))
     f.write('(db.Model):')
     f.write('\n')
-    f.write("    \"\"\"\n")
+    f.write("    '''\n")
     f.write('    模型(表)备注:\n')
-    f.write("    " + tbdesc)
+    f.write('    ' + tbdesc)
     f.write('\n')
-    f.write("    \"\"\"")
+    f.write("    '''")
     f.write('\n')
     f.write("    __tablename__ = '")
     f.write(tb + "'")
@@ -136,11 +138,13 @@ def getType(tp):
         return 'Float'
     if t[0] == 'smallint':
         return 'SMALLINT'
+    if t[0] == 'mediumtext':
+        return 'LONGTEXT'
     return tp
 
 
 if __name__ == "__main__":
-    _dir = r"E:\项目\flask_4433\app\models"
+    _dir = r"E:\项目\flask_4433\app\models\sys"
     if not os.path.exists(_dir):
         os.mkdir(_dir)
     print('存储路径为=>', _dir)
