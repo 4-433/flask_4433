@@ -26,7 +26,7 @@ class SmsService(BaseService):
                 today_count = verification_dic.get('today_count')
                 if today_count == 5:
                     raise SmsSendError(msg="今天发送验证码次数上限！")
-                if last_time - 5 * 60 < time.time():
+                if (last_time + 5 * 60) > time.time():
                     raise SmsSendError(msg="操作频繁，稍后再试！")
             else:
                 verification_dic = {
