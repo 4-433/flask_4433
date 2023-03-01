@@ -28,3 +28,8 @@ class SmsTemplateTypeEnum(Enum):
         "sign_name": "chaichai",
         "sms_template_code": "SMS_270945528"
     }
+
+
+class IsDeleteEnum(Enum):
+    未删除 = 0
+    删除 = 1

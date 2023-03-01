@@ -42,7 +42,8 @@ def get_tables():
                 print('表名错误,请重新输入')
             else:
 
-                sql = "select COLUMN_NAME,ORDINAL_POSITION,IS_NULLABLE,DATA_TYPE,COLUMN_TYPE,COLUMN_KEY,COLUMN_COMMENT from columns  where table_schema='" + _datatable + "' and TABLE_NAME ='" + tb + "'"
+                sql = f"select COLUMN_NAME, ORDINAL_POSITION, IS_NULLABLE, DATA_TYPE, COLUMN_TYPE, COLUMN_KEY, COLUMN_COMMENT, COLUMN_DEFAULT" \
+                      f" from information_schema.COLUMNS  where table_schema='" + _datatable + "' and TABLE_NAME ='" + tb + "'"
                 cur.execute(sql)
                 write_to_file(cur, tb, _tables[tb])
                 cur.close()
@@ -70,6 +71,8 @@ def write_to_file(row, tb, tbdesc):
     f.write(
         'from sqlalchemy import Column, Integer, String, DateTime, Numeric, Boolean, SMALLINT, BigInteger, Float, TEXT, Date')
     f.write('\n')
+    f.write('from sqlalchemy.dialects.mysql import LONGTEXT')
+    f.write('\n')
     f.write('\n')
     f.write('\n')
     f.write('class ')
@@ -78,7 +81,7 @@ def write_to_file(row, tb, tbdesc):
     f.write('\n')
     f.write("    \"\"\"\n")
     f.write('    模型(表)备注:\n')
-    f.write("    " + tbdesc)
+    f.write('    ' + tbdesc)
     f.write('\n')
     f.write("    \"\"\"")
     f.write('\n')
@@ -86,20 +89,39 @@ def write_to_file(row, tb, tbdesc):
     f.write(tb + "'")
     f.write('\n\n')
 
-    reprs = []
-    keys_list = []
-    for v in row:
-        item = '    %s = Column(%s' % (v[0], getType(v[4]),)
-        if v[5] == 'PRI':
+    # reprs = []
+    # keys_list = []
+    # for v in row:
+    #     item = '    %s = Column(%s' % (v[0], getType(v[4]),)
+    #     if v[5] == 'PRI':
+    #         item += ', primary_key=True'
+    #         comment = "    '''   " + v[6] + "   '''"
+    #     elif v[2] == 'NO':
+    #         item += ', nullable=False'
+    #         comment = "    '''   " + v[6] + "   '''"
+    #     else:
+    #         comment = "    '''   " + v[6] + "   '''"
+    #     keys_list.append(v[0])
+    #     reprs.append("%s='{self.%s}'" % (v[0], v[0]))
+    #     item += ')'
+    #     f.write(comment)
+    #     f.write('\n')
+    #     f.write(item)
+    #     f.write('\n\n')
+    for each_row in row:
+        item = '    %s = Column(%s' % (each_row[0], getType(each_row[4]),)
+        comment = "    # " + each_row[6]
+        if each_row[5] == 'PRI':
             item += ', primary_key=True'
-            comment = "    '''   " + v[6] + "   '''"
-        elif v[2] == 'NO':
-            item += ', nullable=False'
-            comment = "    '''   " + v[6] + "   '''"
         else:
-            comment = "    '''   " + v[6] + "   '''"
-        keys_list.append(v[0])
-        reprs.append("%s='{self.%s}'" % (v[0], v[0]))
+            if each_row[2] == 'NO':
+                item += ', nullable=False'
+            else:
+                item += f', nullable=True'
+            if each_row[7] is not None:
+                if each_row[7] == 'now()':
+                    item += f', default=datetime.now()'
+                item += f', default={each_row[7]}'
         item += ')'
         f.write(comment)
         f.write('\n')
@@ -117,7 +139,7 @@ def getType(tp):
     if t[0] == 'varchar':
         return 'String(%s)' % t[1]
     if t[0] == 'datetime':
-        return 'DateTime(), default=datetime.now'
+        return 'DateTime(), default=datetime.now()'
     if t[0] == 'int':
         return "Integer()"
     if t[0] == 'decimal':
@@ -136,11 +158,13 @@ def getType(tp):
         return 'Float'
     if t[0] == 'smallint':
         return 'SMALLINT'
+    if t[0] == 'mediumtext':
+        return 'LONGTEXT'
     return tp
 
 
 if __name__ == "__main__":
-    _dir = r"E:\项目\flask_4433\app\models"
+    _dir = r"E:\项目\flask_4433\app\models\sys"
     if not os.path.exists(_dir):
         os.mkdir(_dir)
     print('存储路径为=>', _dir)

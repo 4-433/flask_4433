@@ -11,6 +11,7 @@ class BaseService:
         self._files = None
         self._form = None
         self._args = None
+        self.user = {}
 
     def get_data(self, key=None):
         if self._data is None:

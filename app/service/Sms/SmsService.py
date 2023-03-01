@@ -22,7 +22,7 @@ class SmsService(BaseService):
             verification_str = R.get_str(mobile=phone)
             if verification_str:
                 verification_dic = json.loads(verification_str)
-                last_time = verification_dic.get('last_time')
+                last_time = int(verification_dic.get('last_time'))
                 today_count = verification_dic.get('today_count')
                 if today_count == 5:
                     raise SmsSendError(msg="今天发送验证码次数上限！")
