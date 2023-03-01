@@ -6,7 +6,10 @@
 @IDE ：PyCharm
 @Motto: 
 """
+import random
+
 from datetime import datetime
+from itsdangerous import JSONWebSignatureSerializer, BadSignature
 from decimal import Decimal
 
 
@@ -48,3 +51,45 @@ def random_int(num):
     for i in range(num):
         stochastic += base_str[random.randint(0, length)]
     return stochastic
+
+
+class Salt:
+    """
+    数据加密
+    """
+    def __init__(self, random_length=20):
+        self.random_length = random_length
+        self.stochastic = self.random_str()
+
+    def random_str(self):
+        """
+        生成一个指定长度的随机字符串
+        """
+        stochastic = ''
+        base_str = 'ABCDEFGHIGKLMNOPQRSTUVWXYZabcdefghigklmnopqrstuvwxyz0123456789'
+        length = len(base_str) - 1
+        for i in range(self.random_length):
+            stochastic += base_str[random.randint(0, length)]
+        return stochastic
+
+    def encrypt(self, password):
+        """
+        将密码加密
+        """
+        s = JSONWebSignatureSerializer(self.stochastic)
+        encrypted = s.dumps({'password': password}).decode()
+        return encrypted
+
+    @staticmethod
+    def decode(stochastic, encrypted):
+        """
+        stochastic:随机字符串
+        Encrypted：加密字符串
+        解密结果
+        """
+        s = JSONWebSignatureSerializer(stochastic)
+        try:
+            data = s.loads(encrypted)
+            return data
+        except BadSignature:
+            return None

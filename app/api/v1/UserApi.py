@@ -2,11 +2,12 @@
 """
 @Time ： 2023/3/1 17:33
 @Auth ： 冯珂
-@File ：User.py
+@File ：UserApi.py
 @IDE ：PyCharm
 @Motto: 
 """
 from app.libs.redprint import Redprint
+from app.service.User.UserService import UserService
 from app.validators.forms import UserRegisterForm
 
 api = Redprint('user')
@@ -19,5 +20,6 @@ def register():
     :return:
     """
     form = UserRegisterForm().validate_for_api()
-    rm = UserService(nickname=form.nickname.data)
-    return rm.register(form.phone.data, form.password.data, form.email.data, form.gender.data)
+    rm = UserService()
+    return rm.register(name=form.name.data, phone=form.phone.data, password=form.password.data, code=form.code.data,
+                       logo=form.logo.data, email=form.email.data)

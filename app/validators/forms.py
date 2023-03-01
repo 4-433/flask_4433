@@ -5,7 +5,7 @@ from app.validators.base import BaseForm
 
 
 class FileGet(BaseForm):
-    resource_id = StringField(validators=[DataRequired(message='必填项')])
+    resource_id = StringField(validators=[DataRequired(message='文件ID必填项')])
 
 
 class UserRegisterForm(BaseForm):
@@ -18,5 +18,6 @@ class UserRegisterForm(BaseForm):
         regex=r'^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+',
         message="请输入正确的邮箱格式")])
     phone = StringField(validators=[DataRequired(message='电话不允许为空'), Regexp(regex=r'^1\d{10}$', message="输入正确的电话号码！")])
-    code = StringField()
+    code = StringField(validators=[DataRequired(message='验证码为必填项')])
+    logo = StringField()
 
