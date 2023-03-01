@@ -7,7 +7,7 @@ from app.libs.error_code import ServerError
 app = create_app()
 
 
-@app.errorhandler(Exception)
+# @app.errorhandler(Exception)
 def framework_error(e):
     """
     全局异常处理
